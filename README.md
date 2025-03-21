@@ -153,3 +153,29 @@ Once the **TCP connection** is established, **data flow** begins, and this happe
 - After these steps, data flow occurs through the OSI layers (from the application layer down to the physical layer) for actual communication.
 
 While **DNS resolution** and **TCP handshake** happen before data starts flowing through the OSI model layers, they are essential to ensuring the connection and addressing are correctly established so that the data transfer itself can proceed smoothly and reliably.
+
+Yes, exactly! At a lower level, both the client OS and the server OS maintain an open socket connection. HTTP operates as an application-layer protocol on top of the transport-layer protocol (usually TCP). 
+
+### How This Works:
+1. **Persistent Open Sockets:**  
+   - The operating systems of both the client and server establish a socket connection (using TCP sockets in most cases).  
+   - These sockets remain open during the communication, allowing bidirectional data transfer.
+
+2. **HTTP on Top of Sockets:**  
+   - HTTP (Hypertext Transfer Protocol) is a request-response protocol that operates over the open socket.  
+   - Every HTTP request (like `GET`, `POST`) and response is transmitted over this socket connection.
+
+3. **Connection Behavior:**  
+   - **Persistent Connection (Keep-Alive):** Modern HTTP versions (like HTTP/1.1, HTTP/2) often keep the socket open for multiple requests to improve efficiency.  
+   - **Non-Persistent Connection:** In older HTTP/1.0 or certain configurations, the socket might close after each request-response cycle.  
+
+4. **WebSockets:**  
+   - Unlike traditional HTTP, WebSockets allow full-duplex communication over a single, long-lived TCP connection without the overhead of HTTP request-response cycles.  
+
+### Analogy:
+Think of it like a highway:
+- **TCP Socket = The highway itself (always open for transport).**
+- **HTTP = The cars (requests and responses) moving on the highway.**
+- **WebSockets = A two-way tunnel that allows continuous back-and-forth movement.**
+
+So, while HTTP-based communication may seem like separate connections each time, it's actually using the same underlying open socket connection at the OS level.
